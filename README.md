@@ -8,7 +8,7 @@
 
 ## Team 
 
-<img src="../App%20Challenge%20Images/Matthew%20Woodward.jpg" style="height:300px; margin:0 .5em .25em 0; float: left;" /> 
+<img src="../AppChallengeImages/Matthew.jpg" style="height:300px; margin:0 .5em .25em 0; float: left;" /> 
 
 **Matthew Woodward:** 
 I am a fourth-year student at the University of Waterloo majoring in Geography and Environmental Management and minoring in Earth Sciences. I was a gold medalist at the International Geography Olympiad, placing eighteenth worldwide in 2022. I am also a recent inductee into the Royal Canadian Geographical Society’s College of Fellows. My areas of interest include geographic education, GIS applications in species conservation, statistical analysis of meteorological flux data, and GIS applications in tracking and documenting meteorological hazards. You can find more of my geographic education work on the True North Geography YouTube channel, which aims to increase the accessibility of geographic education to Canadians by bringing in-field examples of geographic processes to a free platform.
