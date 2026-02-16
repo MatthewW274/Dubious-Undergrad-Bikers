@@ -42,7 +42,7 @@ I am a fourth-year student at the University of Waterloo majoring in Geography a
   ---
 
   ## Data Sources
-  | Source | Data Provider |
+| Source | Data Provider |
 |---|---|
 |Road/Trail Centrelines|City of Toronto| 
 |Bicycle Theft Reports|Toronto Police Services|
