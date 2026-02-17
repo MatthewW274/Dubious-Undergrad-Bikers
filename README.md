@@ -102,8 +102,9 @@ Methods are mainly outlined in our Jupyter Notebook, but a glossary of notebook 
 
 ## Results and Key Takeaways 
 ### Patterns 
+According to our weighted cycling index, much of the City of Toronto has middling cycling comfort. This is unsurprising as much of the city, especially outside of the downtown, is composed of suburban streets that may have slow moving vehicles and safer streets, but do not necessarily have access to bikeshare stations and bike parking.  Also usurprisingly, major arterial roads without bike lanes, like Lakeshore Avenue near Humber Bay, are ranked as the worst for cycling comfort. Trail networks across the city, like those in the Don and Humber River valleys, rank very well on our index. This shows that dedicated cycling infrastructure that is safe, well-lit, near parking and bikeshare stations, and separated from cars is always the best option for the cycling experience. Interestingly, many pockets of downtown are very bike-friendly according to our index. While theft and cycling accidents are more likely in the downtown core, established safe bike infrastructure, access to bicycle parking, and access to bikeshare stations help increase the scores in downtown Toronto.
 ### Notable area 
-### planning insights 
+One notably surprising result of our index was the relatively middling score of the Toronto Islands. While these islands do not have cars (other than emergency vehicles), they do have a lack of bikeshare stations, some pockets of high theft, and a lack of lighting infrastructure. Overall, this leads to a lower score than otherwise expected for this area. This is one of the reasons why we allow for variable weights of each index in our app. If people are biking during the day, theft is less likely and streetlights are a relatively negligible factor, so those weights can be lessened to yield a more accurate analysis.
 
 --- 
 
@@ -115,7 +116,7 @@ For the LTS (Level of Traffic Stress) analysis, 5 classes were outlined. Typical
 
 Additionally, the average biking speed was assumed to be 15 km/h and the average wait time at each traffic light was assumed to be 18 seconds (BicyclesandCycling, n.d.; INRIX, 2022). 
 ### Time of day / seasonality 
-Our method of analysis is limited by the time of day. Perceived safety is variable depending on a number of factors, including light levels (Boyce et. al, 2000). Additionally, our method does not include any information on when snow is cleared on certain routes, which would impact the accessibility of biking to certain neighbourhoods during Canadian winters (Sears et. al, 2012.
+Our method of analysis is limited by the time of day. Perceived safety is variable depending on a number of factors, including light levels (Boyce et. al, 2000). Our analysis includes streetlights as a factor, but the weighted cycling index calculated in our script cannot adjust this factor to 0 during the day. This is part of the reason why users of the app can adjust weights of each factor in our app. If someone only rides during daylight, that factor can be set to a weight of 0. Additionally, our method does not include any information on when snow is cleared on certain routes, which would impact the accessibility of biking to certain neighbourhoods during Canadian winters (Sears et. al, 2012.
 ### Next steps for future study 
 Another analysis outside the scope of our project that could be undertaken is a biking justice analysis. Based on many socioeconomic factors from the Canadian census, this would show which neighbourhoods throughout the City of Toronto have access to safe and accessible biking and which neighbourhoods do not. Our team hopes that everyone in the City of Toronto has safe and equitable access to active transportation. However, this analysis was outside of our abilities given the tight timelines of the app challenge.
 
