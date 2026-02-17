@@ -15,7 +15,7 @@ I am a fourth-year student at the University of Waterloo majoring in Geography a
 
 <img src="AppChallengeImages/Julianne.jpg" style="height:300px; margin:0 .5em .25em 0; float: left;" /> 
 
-**Julianne Ho**
+**Julianne Ho:**
 I am a third-year undergraduate student at UW in the Geography and Environmental Management program specializing in Geomatics and minoring in Urban Studies, though I was first brought into spatial sciences because of a love for ecology. I have always been interested in how organisms move and interact with their environment, and that extends to people! My most recent interests in applying GIS are in reducing bird collisions on campus, contributing to federal Species at Risk recovery and conservation, and studying severe weather impacts on people and ecosystems. In my free time, I like to dillydally with birding, geocaching and kendo.
 
 - <Name> - <Role>
