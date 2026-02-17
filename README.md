@@ -1,4 +1,4 @@
-# Team Just Making Maps (JMM)
+# Team Dubious Undergrad Bikers (DUB)
 *Toronto Bike Accessibility - Safety Index, Accessibility Index and Combined Index* 
 
 ## Links 
@@ -13,7 +13,7 @@
 **Matthew Woodward:** 
 I am a fourth-year student at the University of Waterloo majoring in Geography and Environmental Management and minoring in Earth Sciences. I was a gold medalist at the International Geography Olympiad, placing eighteenth worldwide in 2022. I am also a recent inductee into the Royal Canadian Geographical Society’s College of Fellows. My areas of interest include geographic education, GIS applications in species conservation, statistical analysis of meteorological flux data, and GIS applications in tracking and documenting meteorological hazards. You can find more of my geographic education work on the True North Geography YouTube channel, which aims to increase the accessibility of geographic education to Canadians by bringing in-field examples of geographic processes to a free platform.
 
-<img src="AppChallengeImages/Julianne.jpg" style="height:300px; margin:0 .5em .25em 0; float: left;" /> 
+<img src="AppChallengeImages/Julianne.JPG" style="height:300px; margin:0 .5em .25em 0; float: left;" /> 
 
 **Julianne Ho:**
 I am a third-year undergraduate student at UW in the Geography and Environmental Management program specializing in Geomatics and minoring in Urban Studies, though I was first brought into spatial sciences because of a love for ecology. I have always been interested in how organisms move and interact with their environment, and that extends to people! My most recent interests lie in applying GIS to reduce bird collisions on campus, contribute to federal Species at Risk recovery and land conservation, as well as studying severe weather impacts on people and ecosystems. In my free time, I like to dillydally with birding, geocaching and kendo.
@@ -59,7 +59,7 @@ In any layer, the higher the score, the harder it is to be comfortable biking in
   |Toronto Cycling Network|City of Toronto|
   |Toronto Bike Racks (Outdoor)|City of Toronto|
   |Toronto Bikeshare Stations|City of Toronto|
-  |Toronto Intersections|City of Toronto|
+  |Topographic Mapping - Poles|City of Toronto|
 
 ## Methods 
 Methods are mainly outlined in our Jupyter Notebook, but a glossary of notebook steps has been put together under each category here to help with ease of code navigation.
@@ -74,6 +74,7 @@ Methods are mainly outlined in our Jupyter Notebook, but a glossary of notebook 
 ### Safety Index Method 
 - Create Theft Density Raster
 - Create Accident Density Raster
+- Create Streetlight Density Raster
 - Create LST Raster
 ### Accessibility Index Method 
 - Create Bike Rack Density Raster
@@ -83,6 +84,9 @@ Methods are mainly outlined in our Jupyter Notebook, but a glossary of notebook 
 - Sum Rasters
 - Overlay Safety and Accessibility Indices
 - Add Surface Information to Centrelines
+- Find Which Intersections Have Traffic Lights
+- Spatial Join Traffic Light Count to Centrelines Layer
+- Calculate Bike Travel Time
 - Clean up Centrelines Layer
 
 --- 
@@ -109,7 +113,7 @@ During our analysis, a number of limitations were present throughout our various
 ### Assumptions 
 For the LTS (Level of Traffic Stress) analysis, 5 classes were outlined. Typically, 4 would be utilized as outlined in Raj's cited ECCE blog post, but due to the variation of bike infrastructure and road types throughout Toronto, we felt that 5 classes would be more appropriate (Ubhi, 2021). Note that routes like the 401, 407, or any other major freeway were excluded from the road/bike safety analysis. This is because they are illegal to bike on.
 
-Additionally, the average biking speed was assumed to be ...
+Additionally, the average biking speed was assumed to be 15 km/h and the average wait time at each traffic light was assumed to be 18 seconds (BicyclesandCycling, n.d.; INRIX, 2022). 
 ### Time of day / seasonality 
 Our method of analysis is limited by the time of day. Perceived safety is variable depending on a number of factors, including light levels (Boyce et. al, 2000). Additionally, our method does not include any information on when snow is cleared on certain routes, which would impact the accessibility of biking to certain neighbourhoods during Canadian winters (Sears et. al, 2012.
 ### Next steps for future study 
@@ -133,9 +137,13 @@ Another analysis outside the scope of our project that could be undertaken is a 
 
 ## Citations
 
+Bicycles and Cycling. (n.d.). Average cycling speed for beginner and experienced cyclists. https://www.bicyclesandcycling.com/average-cycling-speed-for-beginner-and-experienced-cyclists/
+
 Boyce et. al. (2000). Perceptions of safety at night in different lighting conditions. Lighting Research and Technology, 32(2): 79-91. https://doi.org/10.1177/096032710003200205
 
 Garrard, J., Rissel, C., & Bauman, A. (2012). Health benefits of cycling. City cycling, 31, 31-56.
+
+INRIX. (2022). Signals Scored, 2022 Annual Summary. https://inrix.com/signals-scorecard/
 
 Monazzam, R. M., et. al. (2021). Effect of cycling development as a non-motorized transport on reducing air and noise pollution-case study: Central districts of Tehran. Urban Climate, 37. https://doi.org/10.1016/j.uclim.2021.100887
 
