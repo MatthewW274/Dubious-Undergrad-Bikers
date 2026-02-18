@@ -23,7 +23,7 @@ I am a third-year undergraduate student at UW in the Geography and Environmental
 <img src="AppChallengeImages/Mohan.jpeg" style="height:300px; margin:0 .5em .25em 0; float: left;" /> 
 
 **Mohan Mahbaz:**
-I’m a first-year student in the University of Waterloo’s Geomatics program. I’m interested in how maps and spatial data can solve real-world problems, especially how location connects to socioeconomic factors and the economy. I’m an Esri Student Associate, and I’m continuing to build practical GIS skills through this App Challenge. Outside of school, I’m a 4th Dan Taekwondo black belt, and I play piano and clarinet.
+I’m a first-year student at University of Waterloo majoring in Geomatics. I’m interested in how maps and spatial data can solve real-world problems, especially how location connects to socioeconomic factors and the economy. I’m an Esri Student Associate, and I’m continuing to build practical GIS skills through this App Challenge. Outside of school, I’m a 4th Dan Taekwondo black belt, and I play piano and clarinet.
 
 --- 
 
