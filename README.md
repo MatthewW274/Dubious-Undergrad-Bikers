@@ -127,9 +127,15 @@ Our method of analysis is limited by the time of day. Perceived safety is variab
 Another analysis outside the scope of our project that could be undertaken is a biking justice analysis. Based on many socioeconomic factors from the Canadian census, this would show which neighbourhoods throughout the City of Toronto have access to safe and accessible biking and which neighbourhoods do not. Our team hopes that everyone in the City of Toronto has safe and equitable access to active transportation. However, this analysis was outside of our abilities given the tight timelines of the app challenge.
 
 --- 
-## Technology Stack 
-### Esri tools 
-### Other tools / libraries 
+### Esri tools
+- ArcGIS Pro  
+- ArcPy  
+- ArcGIS Online  
+- ArcGIS Hub(s)  
+- ArcGIS SDK for JavaScript  
+
+### Other tools / libraries
+- Jupyter Notebooks   
 ### AI usage disclosure 
 - AI was used to troubleshoot the Cycling Comfort Analysis Script when errors occurred.
 - AI was used to troubleshoot broken web app functionality.
@@ -167,6 +173,23 @@ Wynes, S., & Matthews, H. D. (2023). Missing density: assessing support for comp
 
 ## Credits / Licensing 
 ### Dataset credits 
-### License notes 
+The following datasets were used to build the Bike2Basics Safety, Accessibility, and Combined Indices. Unless otherwise noted, data was accessed through each provider’s open data portal.
 
- 
+- **City of Toronto (Open Data)**
+  - Road/Trail Centrelines  
+  - Toronto Cycling Network  
+  - Toronto Bike Racks (Outdoor)  
+  - Toronto Bikeshare Stations  
+  - Topographic Mapping – Poles (used as a proxy for streetlight / lighting infrastructure)
+
+- **Toronto Police Service (Open Data)**
+  - Bicycle Theft Reports  
+  - Cyclists Killed or Seriously Injured (collision / KSI dataset)
+
+
+
+### License notes 
+- **City of Toronto Open Data** is provided under the **Open Government Licence – Toronto (OGL-Toronto)** 
+- **Toronto Police Service Open Data** is provided under the same **open data licensing/terms** 
+- **Esri software and services** (ArcGIS Pro, ArcPy, ArcGIS Online, ArcGIS Hub(s), ArcGIS SDK for JavaScript) are used under Esri’s applicable product and service terms.
+
