@@ -132,12 +132,6 @@ Another analysis outside the scope of our project that could be undertaken is a 
 
 --- 
 
-## Project Structure 
-### Repository layout 
-### Reproduction analysis (ArcPy NoteBook) 
-
---- 
-
 ## Citations
 
 Bicycles and Cycling. (n.d.). Average cycling speed for beginner and experienced cyclists. https://www.bicyclesandcycling.com/average-cycling-speed-for-beginner-and-experienced-cyclists/
