@@ -35,7 +35,7 @@ Our mission is to give Toronto planners a clear, evidence based tool to prioriti
 
 ## App Characteristics 
 ### What the app does
-The app allows user to use the Point Allocation Method to assign weights to each criteria (factor) in how significantly they affect the individual indices' scores, followed by weighting how significantly each index contributes to overall usability. 
+The app allows user to use the Point Allocation Method to assign weights to each criteria (factor) in how significantly they affect the individual indices' scores, followed by weighting how significantly each index contributes to overall usability. The point allocation method was utilizied so that all weights of each factor add up to 100%. Users can change both the weights of the individual factors within each overall index (safety and accessibility) and the weights of each overall index (safety, accessibility, and speed). Users can also switch between tabs that show the accessibility, safety, and combined indices to see how these indices change when weights are changed.
 
 ### Why it's useful and unique 
 ### Key decisions it supports 
