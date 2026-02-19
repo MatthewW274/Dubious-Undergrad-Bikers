@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bike Network Usability Analysis</title>
+
+    <!-- Load specific SDK modules -->
+    <!-- Calcite Design System -->
+    <script type="module" src="https://js.arcgis.com/calcite-components/3.3.3/calcite.esm.js"></script>
+    <!-- JavaScript Maps SDK core API -->
+    <script src="https://js.arcgis.com/4.34/"></script>
+    <!--  JavaScript Maps SDK Map components package -->
+    <script type="module" src="https://js.arcgis.com/4.34/map-components/"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.34/esri/themes/light/main.css" />
+    <style>
+        html, body { height: 100%; width: 100%; margin: 0; padding: 0; }
+        calcite-shell-panel {
+        --calcite-shell-panel-width: 450px; /* Forced width to account for slider and tabs width */
+        }
+        /* Map Container */
+        #TOBikeDiv {
+            flex: 1 1 auto; /* Allows div to grow as needed*/
+            width: 100%;
+            height: 100%;
+            min-height: 500px; /* Force a minimum size to avoid collapsing*/
+        }
+    </style>
+</head>
+<body class="calcite-mode-dark">
+
+    <!--Create Calcite shell and UI of app-->
+    <calcite-shell>
+        <calcite-navigation slot="header"> <!--Create header for app-->
+            <calcite-navigation-logo slot="logo" heading="Bike Network Usability Analysis"></calcite-navigation-logo>
+        </calcite-navigation>
+        <calcite-shell-panel slot="panel-start" position="start" display-mode="dock"> <!--Make left-hand main operational tab-->
+            <calcite-panel> 
+                <div style="flex: 0 0 auto;"></div> <!--Div container for tabs-->
+                <calcite-tabs layout="center"> <!--Pull maps according to tab selected in the panel-->
+                    <calcite-tab-nav slot="title-group">
+                        <!--Create internal custom data attribute to track maps separate from name-->
+                        <calcite-tab-title selected data-map-id="Map1" onclick="switchMap('Map1')">Safety Index</calcite-tab-title>
+                        <calcite-tab-title data-map-id="Map2" onclick="switchMap('Map2')">Accessibility Index</calcite-tab-title>
+                        <calcite-tab-title data-map-id="Map3" onclick="switchMap('Map3')">Combined Index</calcite-tab-title>
+                    </calcite-tab-nav>
+                </calcite-tabs>
+                </div>
+                <div id="slider-container" style="padding: 15px; border-top: 1px solid #b8b8b8;"> <!--Makes a div container for sliders to later be placed within-->
+                    <p style="font-size: 0.8rem; color: #b8b8b8;">Adjust weights below:</p>
+                </div>
+            </calcite-panel>
+        </calcite-shell-panel>
+        <div id="TOBikeDiv"></div> <!--Div container for map-->
+    </calcite-shell>
+
+    <script type="module"> // Logical JavaScript operations
+
+        // Create global variables to hold default weights for Safety and Accessibility indices for Combined Index calculation
+        const Map3_DefaultWeights = {
+            Map1_SafetyWeight: 0.67, 
+            Map2_AccessWeight: 0.33
+        };
+
+        // Create global variables with default values to store Safety & Accessibility scores for Combined Index
+        let globalResults = {
+            Map1_FinalScore: 3, 
+            Map2_FinalScore: 3
+        };
+
+        // Use require() function to import modules from ArcGIS Maps SDK for JavaScript
+        require([
+            "esri/config",
+            "esri/WebMap",
+            "esri/views/MapView",
+            "esri/widgets/Legend"
+        ], function(esriConfig, WebMap, MapView) { // Function intended to access map from ArcGIS Online, create map objects & map view
+
+            // Load API Key for access to private map
+            esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurCrnTmCcEzymprsEAKeawfGPS0RFfE0kmgrw9WWr-y_WZwcGHDTuNfCaNhRm-wNO6uSnNnZ3zn-z19shHJ0kc0b6oAkyBWLGBfDXN4rTrDugcKXMBglAKcEDeqefL5-_lAy2OQlChYA6ZQr_jHBTJHtmTZVKbEue8C7Y3C3hELlLYPONv_z4YxHJOy_3-wEZEOl6awU7HrPRO1ToVJ7aq7-k24oqwTlRo23BLLvV_WILAT1_pyDNUT9t";
+            
+            // Defines three maps pulling different data according to each index
+            const mapInventory = {
+                "Map1": {
+                    id: "a1a2aeb1562f478c816f3a440e0d2812", // Item ID from ArcGIS Online
+                    title: "Safety Index",
+                    factors: [ // Factors needed for the Safety Index calculation
+                    { field: "BkColIdxMn", label: "Bike Collisions" },
+                    { field: "BkThfIdxMn", label: "Bike Theft" },
+                    { field: "StLtIdxMn", label: "Streetlights" },
+                    { field: "BkSafIdxMn", label: "Level of Traffic Stress" }
+                    ]
+                },
+                "Map2": {
+                    id: "a1a2aeb1562f478c816f3a440e0d2812",
+                    title: "Accessibility Index",
+                    factors: [ // Factors needed for the Accessibility Index calculation
+                    { field: "BkShrIdxMn", label: "Bikeshare Stations" },
+                    { field: "BkPrkIdxMn", label: "Bike Parking Stations" },
+                    { field: "BkSafIdxMn", label: "Level of Traffic Stress" }
+                    ]
+                },
+                "Map3": {
+                    id: "a1a2aeb1562f478c816f3a440e0d2812",
+                    title: "Combined Index", // Factors needed for the Combined Index calculation (including from Safety and Accessibility Indices)
+                    factors: [
+                        { type: "stored", key: "Map1_SafetyWeight", label: "Safety Index" },
+                        { type: "stored", key: "Map2_AccessWeight", label: "Accessibility Index" },
+                        { field: "TvlTmIdxMn", label: "Travel Time" }
+                    ]
+                }
+            };
+
+            // Creating the default Web Map object to the Safety Index Map
+            const webmap = new WebMap({
+                portalItem: { 
+                    id: mapInventory["Map1"].id 
+                }
+            });
+
+            // Create Map View object contained in the div used to display the Web Map object (and zooms accordingly)
+            const view = new MapView({
+                container: "TOBikeDiv",
+                map: webmap
+            });
+
+            // MAKE THE SWITCHER ACCESSIBLE TO THE HTML
+            window.switchMap = function(mapIdKey) {
+                console.log("Switching to:", mapIdKey);
+                
+                // Update Map
+                view.map = new WebMap({
+                    portalItem: { id: mapInventory[mapIdKey].id }
+                });
+
+                // Update Sliders
+                buildControls(mapIdKey);
+            };
+
+
+            // Function to detect and save user input from sliders
+            function buildControls(mapIdKey) {
+
+                // 1. Grab the data for the selected map
+                const currentMap = mapInventory[mapIdKey];
+                
+                // Safety check: If the mapIdKey is wrong, stop before crashing
+                if (!currentMap) {
+                    console.error("Map ID not found in inventory:", mapIdKey);
+                    return;
+                }
+
+                const sliderLocation = document.getElementById("slider-container");
+                sliderLocation.innerHTML = ""; // Clear the deck
+
+                // 2. Math for default values
+                const defaultVal = Math.floor(100 / currentMap.factors.length);
+
+                // 3. Create the UI elements
+                currentMap.factors.forEach((factor, index) => {
+                    const label = document.createElement("calcite-label");
+                    label.layout = "inline-space-between";
+                    label.innerText = factor.label;
+
+                    const pointCount = document.createElement("calcite-chip");
+                    pointCount.innerText = defaultVal;
+                    pointCount.id = `val-${index}`;
+                    label.appendChild(pointCount);
+
+                    const slider = document.createElement("calcite-slider");
+                    slider.min = 0;
+                    slider.max = 100;
+                    slider.value = defaultVal;
+                    slider.ticks = 25;
+
+                    // Listener to update the chip text when sliding
+                    slider.addEventListener("calciteSliderInput", (e) => {
+                        pointCount.innerText = e.target.value;
+                    });
+
+                    sliderLocation.appendChild(label);
+                    sliderLocation.appendChild(slider);
+                });
+
+                // 4. Create the button
+                const calcBtn = document.createElement("calcite-button");
+                calcBtn.innerText = "Calculate";
+                calcBtn.width = "full";
+                calcBtn.style.marginTop = "20px";
+                calcBtn.onclick = () => {
+                    handleCalculation(currentMap, mapIdKey, sliderLocation);
+                };
+                sliderLocation.appendChild(calcBtn);
+            } 
+
+            // Default view Safety Index map at startup
+            view.when(() => {
+                buildControls("Map1");
+            });
+
+            // Detects for user input to switch tabs
+            document.querySelector("calcite-tab-nav").addEventListener("calciteTabNavChange", (event) => {
+
+                // Pulls associated map based on user input
+                const mapIdKey = event.target.selectedItem.getAttribute("data-map-id"); // Finds custom data attribute in HTML
+
+                // Swap the map depending on tab selected
+                const currentMap = mapInventory[mapIdKey];
+
+                if (mapIdKey) {
+                    view.map = new WebMap({
+                    portalItem: { id: currentMap.id } // Pulls specifically ID from map object
+                    });
+
+                    buildControls(mapIdKey);
+                }
+            });
+            // Function to perform weighting calculations
+            function handleCalculation(currentMap, mapIdKey, sliderLocation) {
+                let currentWeights = {};
+                const sliders = sliderLocation.querySelectorAll("calcite-slider");
+
+                sliders.forEach((s, index) => { // Loop to each slider to read and save the user inputted values
+                    const factorDecNum = currentMap.factors[index].field;
+                    currentWeights[factorDecNum] = s.value / 100; // Converts points/percentage allocated into decimals for calculations
+                });
+
+                // Map redraws based on weights
+                applyArcadeRenderer(currentMap.factors, mapIdKey, currentWeights);
+            }
+
+            function applyArcadeRenderer(factors, mapIdKey, weights) {
+                const layer = view.map.layers.find(l => l.type === "feature");
+                let expression = "";
+
+                if (mapIdKey === "Map3") {
+                    // Blending the two indices
+                    const sW = Map3_DefaultWeights.Map1_SafetyWeight; // e.g., 0.6
+                    const aW = Map3_DefaultWeights.Map2_AccessWeight; // e.g., 0.4
+                    
+                    expression = `($feature.Safety_Field * ${sW}) + ($feature.Infra_Field * ${aW})`;
+                } else {
+                    // Maps 1 & 2: Creating "Virtual" weighted values
+                    // This calculates (Factor * Weight) for every item in your list
+                    expression = factors.map(f => {
+                        const w = weights[f.field]; 
+                        return `($feature.${f.field} * ${w})`; 
+                    }).join(" + ");
+                }
+
+                // Apply the math to the renderer
+                layer.renderer = {
+                    type: "simple",
+                    symbol: { type: "simple-line", width: "3.5px" },
+                    visualVariables: [{
+                        type: "color",
+                        valueExpression: expression,
+                        stops: [
+                            { value: 1, color: "#228B22", label: "Low Impact" },
+                            { value: 3, color: "#FFE700", label: "Medium" },
+                            { value: 5, color: "#FF0000", label: "High Impact" }
+                        ]
+                    }]
+                };
+                layer.refresh();
+            }
+        });
+    </script>
+</body>
+</html>
