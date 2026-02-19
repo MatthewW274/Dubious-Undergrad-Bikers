@@ -69,30 +69,33 @@ In any layer, the higher the score, the harder it is to be comfortable biking in
 
 ## Methods 
 Methods are mainly outlined in our Jupyter Notebook (CyclingComfortAnalysisCode.ipynb), but a glossary of notebook steps has been put together under each category here to help with ease of code navigation.
-### Preprocessing
+## Preprocessing
 - Import Packages
 - Input Data Paths
 - Add Bikeshare Stations
+- Create Streetlight Data
+- Create Traffic Light Data
 - Limit Centrelines to Road/Trail Network
 - Spatial Join Bike Lane Information to Road/Trail Network
-- Create Roadway Buffers
 - Create Level of Traffic Stress Classification
-### Safety Index Method 
+- Find Which Intersections Have Traffic Lights
+- Spatial Join Traffic Light Count to Centrelines Layer
+- Calculate Centreline Distance
+- Calculate Travel Time
+- Create Roadway Buffers
+## Safety Index Method
 - Create Theft Density Raster
 - Create Accident Density Raster
 - Create Streetlight Density Raster
-- Create LST Raster
-### Accessibility Index Method 
+- Create LTS Raster
+## Accessibility Index Method
 - Create Bike Rack Density Raster
 - Create Bikeshare Density Raster
-### Combined Index Method
+- Speed Index Method
+- Create Travel Time Raster
+- Pre Uploading Steps
 - Reclassify all Raster from 1-5
-- Sum Rasters
-- Overlay Safety and Accessibility Indices
 - Add Surface Information to Centrelines
-- Find Which Intersections Have Traffic Lights
-- Spatial Join Traffic Light Count to Centrelines Layer
-- Calculate Bike Travel Time
 - Clean up Centrelines Layer
 
 --- 
