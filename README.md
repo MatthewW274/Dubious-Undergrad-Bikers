@@ -38,7 +38,12 @@ Our mission is to give Toronto planners a clear, evidence based tool to prioriti
 The app allows user to use the Point Allocation Method to assign weights to each criteria (factor) in how significantly they affect the individual indices' scores, followed by weighting how significantly each index contributes to overall usability. The point allocation method was utilizied so that all weights of each factor add up to 100%. Users can change both the weights of the individual factors within each overall index (safety and accessibility) and the weights of each overall index (safety, accessibility, and speed). Users can also switch between tabs that show the accessibility, safety, and combined indices to see how these indices change when weights are changed.
 
 ### Why it's useful and unique 
+
+Bike2Basics is useful because it combines several cycling datasets into one map that users can adjust. Instead of one fixed “safety” score, users can change the weights for factors like LTS, collisions, theft, lighting, and access to bikeshare/parking. This lets planners test different priorities (like night riding vs. daytime, or safety vs. speed) and quickly see where Toronto’s biking network is strong or needs improvement.
+
 ### Key decisions it supports 
+
+The app supports real planning and policy decisions, including: where to build new protected infrastructure for high priority areas, which neighborhoods are underserved by key components of cycling comfort (lighting, bikeshare, parking, etc.), what type of intervention is most needed in a location (for example, safety upgrades vs. access improvements), how priorities change under different goals (safety vs. speed/travel time), and how to justify investments with evidence by linking proposed upgrades to measurable factors.
 
 --- 
 
