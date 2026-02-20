@@ -6,6 +6,7 @@
 ## Links 
 - **Live App:** <link>
 - **Video Demo:** <link>
+- **ArcGIS Hub Site:**
 
 ## Team 
 
