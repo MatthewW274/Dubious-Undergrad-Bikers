@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bike Network Usability Analysis</title>
+  <title>Bike2Basics</title>
 
   <script type="module" src="https://js.arcgis.com/calcite-components/3.3.3/calcite.esm.js"></script>
-
 
   <script src="https://js.arcgis.com/4.34/"></script>
   <link rel="stylesheet" href="https://js.arcgis.com/4.34/esri/themes/light/main.css" />
@@ -21,6 +20,44 @@
       min-height: 500px;
       background: #1f1f1f;
       position: relative;
+    }
+
+    /* Welcome Overlay Styles */
+    #welcomeOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7); /* Dark semi-transparent screen */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000; /* Ensures it stays on top of the app */
+    }
+
+    .welcome-box {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      color: #151515; /* Dark text for white background */
+    }
+
+    .welcome-box h2 { margin-top: 0; color: #007ac2; }
+    .welcome-box p { line-height: 1.5; margin-bottom: 20px; }
+
+    /* Logo Styling - Top Left & Centered */
+    .app-logo {
+        height: 44px;
+        width: 44px;
+        border-radius: 8px;
+        margin-right: 15px; /* Creates spacing from the right wall */
+        object-fit: cover;
+        align-self: center;
+        background-color: #353535;
     }
 
     calcite-tab-title {
@@ -46,13 +83,19 @@
       font-weight: 600;
       color: #ffffff;
     }
-    .panel-instructions ol {
+    /* Updated Instruction Text to Paragraph */
+    .panel-instructions p {
       margin: 0;
-      padding-left: 18px;
       color: #cfcfcf;
       font-size: 0.85rem;
       line-height: 1.35rem;
     }
+
+    .context-content { padding: 20px; color: #efefef; line-height: 1.5; }
+    .context-content h2 { color: #00a6ff; margin-top: 0; font-size: 1.2rem; }
+    
+    /* Hide the default collapse arrows on the right panel */
+    #contextShellPanel::part(collapsible-button) { display: none; }
 
     .hint { font-size: 0.8rem; color: #b8b8b8; margin: 0 0 10px 0; }
 
@@ -115,21 +158,32 @@
 </head>
 
 <body class="calcite-mode-dark">
+
+  <div id="welcomeOverlay">
+    <div class="welcome-box">
+      <h2>Welcome!</h2>
+      <p>Welcome to Bike2Basics, a visualization tool that can be used to display and weigh factors contributing to bike usability across the City of Toronto. There are three navigation tabs, each with their own contributing factors: the Safety Index, the Accessibility Index, and the Combined Index. Feel free to adjust the various factors and take a look at how they impact the cycling experience in the city. For assistance on using the app, click the drop-down item in the top-left corner. Click OK below to access the app.</p>
+      <calcite-button id="closeWelcome" width="full" appearance="solid">OK</calcite-button>
+    </div>
+  </div>
+
   <calcite-shell>
     <calcite-navigation slot="header">
-      <calcite-navigation-logo slot="logo" heading="Bike Network Usability Analysis"></calcite-navigation-logo>
+        <calcite-navigation-logo slot="logo" heading="Bike2Basics"></calcite-navigation-logo>
+        <div slot="content-end" style="display: flex; height: 100%;">
+            <img src="Bike2Basics_Logo_Final.png" alt="Logo" class="app-logo" />
+        </div>
     </calcite-navigation>
 
     <calcite-shell-panel slot="panel-start" position="start" display-mode="dock">
       <calcite-panel>
-        <div class="panel-instructions">
-          <h3>How to use this app</h3>
-          <ol>
-            <li>Select a tab (Safety, Accessibility, Combined).</li>
-            <li>Adjust weights so the total equals <b>100</b>.</li>
-            <li>Click <b>Calculate</b> to update the map.</li>
-          </ol>
-        </div>
+        <calcite-accordion selection-mode="single">
+          <calcite-accordion-item heading="How to use this app" icon-start="information">
+            <div class="panel-instructions">
+              <p>Importance can be assigned to each factor contributing to the indices by using weights, with 0 having no contribution and 100 being the most important. Adjustments can be made by using the panel below using the sliders, or by entering the values in the nearby box. The weights total must add to 100 to be able to perform calculations and generate the map.</p>
+            </div>
+          </calcite-accordion-item>
+        </calcite-accordion>
 
         <calcite-tabs layout="center">
           <calcite-tab-nav slot="title-group" id="tabNav">
@@ -145,12 +199,33 @@
       </calcite-panel>
     </calcite-shell-panel>
 
+    <calcite-shell-panel slot="panel-end" position="end" id="contextShellPanel" display-mode="float" collapsed>
+      <calcite-action-bar slot="action-bar">
+        <calcite-action text="Information" icon="information" id="infoAction"></calcite-action>
+      </calcite-action-bar>
+      <calcite-panel heading="Index Context">
+          <div class="context-content" id="contextBody">
+              </div>
+      </calcite-panel>
+    </calcite-shell-panel>
+
     <div id="TOBikeDiv">
       <div id="toast">Applied ✅</div>
     </div>
   </calcite-shell>
 
   <script>
+    // Toggle Right Panel
+    const contextPanel = document.getElementById("contextShellPanel");
+    document.getElementById("infoAction").onclick = () => {
+        contextPanel.collapsed = !contextPanel.collapsed;
+    };
+
+    // Logic to hide the welcome screen
+    document.getElementById("closeWelcome").onclick = () => {
+      document.getElementById("welcomeOverlay").style.display = "none";
+    };
+
     require([
       "esri/config",
       "esri/WebMap",
@@ -158,8 +233,7 @@
       "esri/widgets/Legend"
     ], function (esriConfig, WebMap, MapView, Legend) {
 
-      esriConfig.apiKey =
-        "AAPTxy8BH1VEsoebNVZXo8HurCrnTmCcEzymprsEAKeawfGPS0RFfE0kmgrw9WWr-y_WZwcGHDTuNfCaNhRm-wNO6uSnNnZ3zn-z19shHJ0kc0b6oAkyBWLGBfDXN4rTrDugcKXMBglAKcEDeqefL5-_lAy2OQlChYA6ZQr_jHBTJHtmTZVKbEue8C7Y3C3hELlLYPONv_z4YxHJOy_3-wEZEOl6awU7HrPRO1ToVJ7aq7-k24oqwTlRo23BLLvV_WILAT1_pyDNUT9t";
+      esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurCrnTmCcEzymprsEAKeawfGPS0RFfE0kmgrw9WWr-y_WZwcGHDTuNfCaNhRm-wNO6uSnNnZ3zn-z19shHJ0kc0b6oAkyBWLGBfDXN4rTrDugcKXMBglAKcEDeqefL5-_lAy2OQlChYA6ZQr_jHBTJHtmTZVKbEue8C7Y3C3hELlLYPONv_z4YxHJOy_3-wEZEOl6awU7HrPRO1ToVJ7aq7-k24oqwTlRo23BLLvV_WILAT1_pyDNUT9t";
     
         // Global variables to contain user inputted weights
         let persistentWeights = {
@@ -172,6 +246,7 @@
         Map1: {
           id: "a1a2aeb1562f478c816f3a440e0d2812",
           title: "Safety Index",
+          context: "<h2>Safety Index</h2><p>The Safety Index is a combination of a streetlight density index, a bike theft occurrence density index, a bike collisions occurrence index, and a level of traffic stress (LTS) index. The first three indices within the safety index are calculated using point density. The level of traffic stress index is outlined on our analysis notebook and our ArcGIS Hub Site.</p>",
           factors: [
             { field: "BkColIdxMn", label: "Bike Collisions" },
             { field: "BkThfIdxMn", label: "Bike Theft" },
@@ -182,6 +257,7 @@
         Map2: {
           id: "a1a2aeb1562f478c816f3a440e0d2812",
           title: "Accessibility Index",
+          context: "<h2>Accessibility Index</h2><p>The Accessibility Index is a combination of bike parking density index using bike rack data, a bikeshare station density index, and a level of traffic stress (LTS) index. The first two indices within the accessibility index are calculated using point density. The LTS index is outlined on our analysis notebook and our ArcGIS Hub Site.</p>",
           factors: [
             { field: "BkShrIdxMn", label: "Bikeshare Stations" },
             { field: "BkPrkIdxMn", label: "Bike Parking" },
@@ -191,6 +267,7 @@
         Map3: {
           id: "a1a2aeb1562f478c816f3a440e0d2812",
           title: "Combined Index",
+          context: "<h2>Combined Index</h2><p>The Combined Index combines the previously calculated Safety and Accessibility Indices with a travel time index to show (on balance) the usability of sections of road to bike on within the City of Toronto, with 1 indicating the most usable and bike-friendly and 5 being the most hostile to bikers.</p>",
           factors: [
             { key: "Safety", label: "Safety Index (uses your Safety tab weights)" },
             { key: "Access", label: "Accessibility Index (uses your Accessibility tab weights)" },
@@ -202,6 +279,11 @@
       const sliderContainer = document.getElementById("slider-container");
       const errorBox = document.getElementById("errorBox");
       const toast = document.getElementById("toast");
+      const contextBody = document.getElementById("contextBody");
+
+      function updateContext(mapIdKey) {
+          contextBody.innerHTML = mapInventory[mapIdKey].context;
+      }
 
       function toastShow() {
         toast.style.display = "block";
@@ -262,7 +344,7 @@
         await view.map.when();
 
         const layer = getPolylineFeatureLayer();
-        
+        if(!layer) return null;
 
         layer.visible = true;
         await layer.load();
@@ -303,11 +385,7 @@
         const current = mapInventory[mapIdKey];
         sliderContainer.innerHTML = "";
         sliderContainer.appendChild(errorBox);
-        
-        const hint = document.createElement("p");
-        hint.className = "hint";
-        hint.textContent = "Adjust weights. Total must equal 100 to enable Calculate.";
-        sliderContainer.appendChild(hint);
+        updateContext(mapIdKey);
 
         const notice = document.createElement("calcite-notice");
         notice.kind = "danger";
@@ -371,6 +449,7 @@
           slider.value = savedVal;
           slider.ticks = 25;
 
+          // Bidirectional Sync Restored
           const sync = (val) => {
             const v = clampInt(val, 0, 100);
             slider.value = v;
@@ -462,18 +541,6 @@
         const sliders = sliderContainer.querySelectorAll("calcite-slider");
         const weights = Array.from(sliders).map(s => Number(s.value) / 100);
 
-        const required = (mapIdKey === "Map1")
-          ? ["BkColIdxMn", "BkThfIdxMn", "StLtIdxMn", "BkSafIdxMn"]
-          : (mapIdKey === "Map2")
-            ? ["BkShrIdxMn", "BkPrkIdxMn", "BkSafIdxMn"]
-            : ["TvlTmIdxMn","BkColIdxMn","BkThfIdxMn","StLtIdxMn","BkSafIdxMn","BkShrIdxMn","BkPrkIdxMn"];
-
-        const missing = required.filter(f => !fieldExists(layer, f));
-        if (missing.length) {
-          showError("Missing fields in your feature layer", "Missing: " + missing.join(", "));
-          return;
-        }
-
         let expr = "";
 
         if (mapIdKey === "Map1") {
@@ -505,7 +572,12 @@
         webmap = new WebMap({ portalItem: { id: mapInventory[mapIdKey].id } });
         view.map = webmap;
 
-        
+        try {
+          await webmap.load();
+          await ensureLayerReady();
+          view.resize();
+        } catch (e) {
+        }
       }
 
       document.querySelectorAll("calcite-tab-title").forEach((tab) => {
