@@ -83,7 +83,7 @@
             // Defines three maps pulling different data according to each index
             const mapInventory = {
                 "Map1": {
-                    id: "ebc51d7757944bcd82179ca0c56e9d85", // Item ID from ArcGIS Online
+                    id: "a1a2aeb1562f478c816f3a440e0d2812", // Item ID from ArcGIS Online
                     title: "Safety Index",
                     factors: [ // Factors needed for the Safety Index calculation
                     { field: "BkColIdxMn", label: "Bike Collisions" },
@@ -93,7 +93,7 @@
                     ]
                 },
                 "Map2": {
-                    id: "ebc51d7757944bcd82179ca0c56e9d85",
+                    id: "a1a2aeb1562f478c816f3a440e0d2812",
                     title: "Accessibility Index",
                     factors: [ // Factors needed for the Accessibility Index calculation
                     { field: "BkShrIdxMn", label: "Bikeshare Stations" },
@@ -102,7 +102,7 @@
                     ]
                 },
                 "Map3": {
-                    id: "ebc51d7757944bcd82179ca0c56e9d85",
+                    id: "a1a2aeb1562f478c816f3a440e0d2812",
                     title: "Combined Index", // Factors needed for the Combined Index calculation (including from Safety and Accessibility Indices)
                     factors: [
                         { type: "stored", key: "Map1_SafetyWeight", label: "Safety Index" },
@@ -125,7 +125,7 @@
                 map: webmap
             });
 
-            // MAKE THE SWITCHER ACCESSIBLE TO THE HTML
+            // Make switcher available to HTML
             window.switchMap = function(mapIdKey) {
                 console.log("Switching to:", mapIdKey);
                 
@@ -145,12 +145,6 @@
                 // 1. Grab the data for the selected map
                 const currentMap = mapInventory[mapIdKey];
                 
-                // Safety check: If the mapIdKey is wrong, stop before crashing
-                if (!currentMap) {
-                    console.error("Map ID not found in inventory:", mapIdKey);
-                    return;
-                }
-
                 const sliderLocation = document.getElementById("slider-container");
                 sliderLocation.innerHTML = ""; // Clear the deck
 
