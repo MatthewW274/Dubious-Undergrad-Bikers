@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bike Network Usability Analysis</title>
 
-  <!-- Calcite -->
   <script type="module" src="https://js.arcgis.com/calcite-components/3.3.3/calcite.esm.js"></script>
 
-  <!-- ArcGIS JS API -->
+
   <script src="https://js.arcgis.com/4.34/"></script>
   <link rel="stylesheet" href="https://js.arcgis.com/4.34/esri/themes/light/main.css" />
 
@@ -161,6 +160,13 @@
 
       esriConfig.apiKey =
         "AAPTxy8BH1VEsoebNVZXo8HurCrnTmCcEzymprsEAKeawfGPS0RFfE0kmgrw9WWr-y_WZwcGHDTuNfCaNhRm-wNO6uSnNnZ3zn-z19shHJ0kc0b6oAkyBWLGBfDXN4rTrDugcKXMBglAKcEDeqefL5-_lAy2OQlChYA6ZQr_jHBTJHtmTZVKbEue8C7Y3C3hELlLYPONv_z4YxHJOy_3-wEZEOl6awU7HrPRO1ToVJ7aq7-k24oqwTlRo23BLLvV_WILAT1_pyDNUT9t";
+    
+        // Global variables to contain user inputted weights
+        let persistentWeights = {
+            "Map1": null,
+            "Map2": null,
+            "Map3": null
+        };
 
       const mapInventory = {
         Map1: {
@@ -256,13 +262,7 @@
         await view.map.when();
 
         const layer = getPolylineFeatureLayer();
-        if (!layer) {
-          showError(
-            "No polyline FeatureLayer found in the WebMap.",
-            "Your WebMap must include the Toronto centrelines/trails polyline layer."
-          );
-          return null;
-        }
+        
 
         layer.visible = true;
         await layer.load();
@@ -303,7 +303,7 @@
         const current = mapInventory[mapIdKey];
         sliderContainer.innerHTML = "";
         sliderContainer.appendChild(errorBox);
-
+        
         const hint = document.createElement("p");
         hint.className = "hint";
         hint.textContent = "Adjust weights. Total must equal 100 to enable Calculate.";
@@ -329,7 +329,16 @@
         meta.appendChild(totalChip);
         sliderContainer.appendChild(meta);
 
-        const defaultVal = Math.floor(100 / current.factors.length);
+        // 2. Initialize weights if they don't exist yet (equal split)
+        if (!persistentWeights[mapIdKey]) {
+            persistentWeights[mapIdKey] = {};
+            const defaultVal = Math.floor(100 / current.factors.length);
+            current.factors.forEach((f, idx) => {
+                persistentWeights[mapIdKey][idx] = defaultVal;
+            });
+        }
+
+        const weightsToUse = persistentWeights[mapIdKey];
 
         const calcBtn = document.createElement("calcite-button");
         calcBtn.innerText = "Calculate";
@@ -337,7 +346,7 @@
         calcBtn.style.marginTop = "10px";
         calcBtn.disabled = true;
 
-        current.factors.forEach((factor) => {
+        current.factors.forEach((factor, index) => {
           const row = document.createElement("div");
           row.className = "row";
 
@@ -346,24 +355,28 @@
           label.style.flex = "1";
           label.innerText = factor.label;
 
+          const savedVal = weightsToUse[index];
+
           const input = document.createElement("calcite-input");
           input.type = "number";
           input.min = "0";
           input.max = "100";
           input.step = "1";
-          input.value = String(defaultVal);
+          input.value = String(savedVal);
           input.style.width = "86px";
 
           const slider = document.createElement("calcite-slider");
           slider.min = 0;
           slider.max = 100;
-          slider.value = defaultVal;
+          slider.value = savedVal;
           slider.ticks = 25;
 
           const sync = (val) => {
             const v = clampInt(val, 0, 100);
             slider.value = v;
             input.value = String(v);
+            // Saves the user's assigned individual weights so they can go back and adjust them
+            persistentWeights[mapIdKey][index] = v;
             updateTotalUI(sliderContainer, totalChip, calcBtn, notice);
           };
 
@@ -492,13 +505,7 @@
         webmap = new WebMap({ portalItem: { id: mapInventory[mapIdKey].id } });
         view.map = webmap;
 
-        try {
-          await webmap.load();
-          await ensureLayerReady();
-          view.resize();
-        } catch (e) {
-          showError("WebMap failed to load (private/not shared?)", e?.message || e);
-        }
+        
       }
 
       document.querySelectorAll("calcite-tab-title").forEach((tab) => {
