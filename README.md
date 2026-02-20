@@ -51,7 +51,7 @@ The app supports real planning and policy decisions, including: where to build n
 ### Study Area 
 Our study area is limited to the City of Toronto's city limits. This area has a diverse array of biking infrastructure that will help us analyze the ease and comfort of biking throughout the city.
 ### Common Controls - Tab Navigation Between Indices, Weight Adjustments
-
+To use the Bike2Basics app, click on one of the indices below this tab. Each tab has a number of factors related to bicycle comfort. The safety index has a streetlight density index, a bike theft index, a bike collisions index, and a level of traffic stress index. The accessibility index has a level of traffic stress index, a bike parking index, and a bikeshare index. The combined index has the previously calculated safety and accessibility indices, with an added speed index. All weights are adjustable using the sliders or the text boxes on the side of the app. Feel free to adjust the factors and take a look at how various indices impact the cycling experience in the city of Toronto.
 ### Three Tabs 
 - Tab 1: Safety Index
 - Tab 2: Accessibility Index
