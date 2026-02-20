@@ -5,7 +5,7 @@
 
 ## Links 
 - **ArcGIS Hub site:** https://bike-to-basics-uwaterloo.hub.arcgis.com/
-- **Live App:** https://mattheww274.github.io/AppChallenge2026_UW/
+- **Live App:** https://mattheww274.github.io/Dubious-Undergrad-Bikers/
 - **Video Demo:** https://youtu.be/yxdsBwqUAV0
 
 ## Team 
