@@ -141,6 +141,7 @@ Another analysis outside the scope of our project that could be undertaken is a 
 ### AI usage disclosure 
 - AI was used to troubleshoot the Cycling Comfort Analysis Script when errors occurred.
 - AI was used to troubleshoot broken web app functionality.
+- AI was used to generate code for app UI and ArcGIS Hub website UI.
 --- 
 
 ## Citations
@@ -187,8 +188,6 @@ The following datasets were used to build the Bike2Basics Safety, Accessibility,
 - **Toronto Police Service (Open Data)**
   - Bicycle Theft Reports  
   - Cyclists Killed or Seriously Injured (collision / KSI dataset)
-
-
 
 ### License notes 
 - **City of Toronto Open Data** is provided under the **Open Government Licence – Toronto (OGL-Toronto)** 
