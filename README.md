@@ -5,7 +5,7 @@
 
 ## Links 
 - **Live App:** https://mattheww274.github.io/AppChallenge2026_UW/
-- **Video Demo:** <link>
+- **Video Demo:** https://youtu.be/yxdsBwqUAV0
 - **ArcGIS Hub Site:**
 
 ## Team 
